@@ -20,7 +20,7 @@ class Menu:
     def __init__(self, bot):
 
         self.bot = bot
-        self.usuarios_estado = {}  # Diccionario para guardar estado de cada usuario. Atributo de Menu
+        self.usuarios_estado = {}  # Diccionario para guardar estado de cada usuario.
 
         #self.stickers_cute = [
         #    "CAACAgIAAxkBAAEHk2Fg1b9Xl2Z5fVtRQJZc9nRV1vOYGgACXQADwDZPE0G1t9V5uN7zIwQ",  # gatito
@@ -129,7 +129,7 @@ class Menu:
                 self.bot.send_message(user_id, "No estoy segura de ese clima 😅 pero igual podés usar algo cute y cómodo 💕")
             self.usuarios_estado[user_id]["estado"] = "menu"
             self.mostrar_menu(user_id) 
-            
+
     def estado_analizar(self, user_id, frase):
         
         analizador_sentimiento = pipeline('sentiment-analysis', model = 'pysentimiento/robertuito-sentiment-analysis')
