@@ -3,7 +3,7 @@ from transformers import pipeline
 class AnalizarSentimiento:
     def __init__(self):
         pass
-    
+   
     def analizar_sentimiento(self, frase):
         
         analizador_sentimiento = pipeline('sentiment-analysis', model = 'pysentimiento/robertuito-sentiment-analysis')

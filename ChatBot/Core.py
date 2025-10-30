@@ -19,7 +19,6 @@ import random
 # Diccionario para guardar estado de cada usuario
 usuarios_estado = {}  
 
-
 stickers_cute = [
     "CAACAgIAAxkBAAEHk2Fg1b9Xl2Z5fVtRQJZc9nRV1vOYGgACXQADwDZPE0G1t9V5uN7zIwQ",  # gatito
     "CAACAgIAAxkBAAEHk2Ng1b9XqfO3JrtUoxv4zFQK5iY6JwACXgADwDZPE3lF8jl0g5q0IwQ",  # corazon rosa
@@ -51,7 +50,7 @@ def responder(bot, user_id, texto):
             outfit.agregar_prenda(prenda1)
             outfit.agregar_prenda(prenda2)
             bot.send_message(user_id, f"{outfit.mostrar_outfit()} 🩷✨")
-        # En caso de que fallen los stickers, comentar esta línea:
+        # En caso de que fallen los stickers, descomentar esta línea:
         # bot.send_sticker(user_id, random.choice(stickers_cute))
             mostrar_menu(bot, user_id)
 

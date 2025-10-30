@@ -51,13 +51,6 @@ def analizar_texto(message):
 
     bot.send_message(user_id, f"El resultado de tu analisis: {resultado}") #El bot le manda al usuario el analisis de sentimiento de su mensaje 
 
-#    ds = ResponderDataset().cargar_dataset()
-#    respuesta = ResponderDataset().buscar_en_dataset(texto,ds)
-#    if respuesta:
-#        bot.reply_to(message, respuesta)
-#    else:
-#        bot.reply_to(message, "No tengo esta respuesta")
-
 
 @bot.message_handler(func=lambda m: True)
 def menu(message):
