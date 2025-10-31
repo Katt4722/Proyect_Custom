@@ -101,4 +101,3 @@ def responder(bot, user_id, texto):
             bot.send_message(user_id, "No estoy segura de ese clima 😅 pero igual podés usar algo cute y cómodo 💕")
         usuarios_estado[user_id]["estado"] = "menu"
         mostrar_menu(bot, user_id)
-
