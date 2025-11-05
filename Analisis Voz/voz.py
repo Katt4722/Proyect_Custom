@@ -6,7 +6,6 @@ from typing import Optional
 import time
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_API_KEY')
@@ -16,10 +15,18 @@ GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 bot = tlb.TeleBot(TELEGRAM_TOKEN)
 groq_client = Groq(api_key=GROQ_API_KEY)
 
+class AsistenteVoz: 
+    def __init__(self, bot, groq_client):
+        self.bot = bot
+        self.groq_client = groq_client
+
+
 # Cargar datos (por ejemplo, combinaciones o tendencias)
 def load_fashion_data():
     try:
-        with open("fashion_dataset.json", "r", encoding="utf-8") as f:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, "fashion_dataset.json")
+        with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         print(f"⚠️ Error al cargar el dataset: {str(e)}")
@@ -127,16 +134,3 @@ def handle_voice(message: tlb.types.Message):
     else:
         bot.reply_to(message, "❌ No pude procesar tu consulta. Intenta nuevamente más tarde.")
 
-
-
-if __name__ == "__main__":
-    if fashion_data:
-        print("👜 Bot de moda iniciado 💅")
-        while True:
-            try:
-                bot.polling(none_stop=True, interval=0, timeout=20)
-            except Exception as e:
-                print(f"Error en polling: {str(e)}")
-                time.sleep(5)
-    else:
-        print("No se pudo cargar el dataset de moda. Verifica el archivo JSON.")
