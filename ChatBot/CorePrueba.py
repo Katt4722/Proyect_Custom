@@ -35,7 +35,8 @@ class Menu:
                                 "3️⃣ Armar outfit con tu ropero 🌸\n"
                                 "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
                                 "5️⃣ Analizar sentimientos\n"
-                                "6️⃣ Salir 🩷") 
+                                "6️⃣ Hablemos! 🩷"
+                                "7️⃣ Salir 🩷") 
 
     def responder(self, user_id, texto):
         
@@ -56,6 +57,8 @@ class Menu:
             self.estado_clima(user_id, texto)
         elif estado == "analizar":
             self.estado_analizar(user_id, texto)
+        elif estado == "consultar":
+            self.estado_consultar(user_id, texto)
              
 
     def estado_menu(self, user_id, texto):
@@ -86,13 +89,17 @@ class Menu:
             elif texto == "4":
                 # Outfit según clima
                 self.usuarios_estado[user_id]["estado"] = "clima"
-                self.bot.send_message(user_id, "Contame cómo está el clima hoy ☀️🌧️❄️ (ej: húmedo, frío, soleado)")
+                self.bot.send_message(user_id, "Contame cómo está el clima hoy ☀️🌧️❄️ (lluvioso, humedo, frio, soleado)")
 
             elif texto == "5":
                 self.usuarios_estado[user_id]["estado"] = "analizar"
                 self.bot.send_message(user_id, "Mandame un mensaje y analizare que sentimientos transmite!")
 
             elif texto == "6":
+                self.usuarios_estado[user_id]["estado"] = "consultar"
+                self.bot.send_message(user_id, "Esta opcion es para que hablemos! Podes preguntarme sobre tendencias, marcas de ropa o consultas sobre moda en general")
+
+            elif texto == "7":
                 self.bot.send_message(user_id, "Bye! 🩷 ¡Que tengas un día fashionista! ✨")
                 self.usuarios_estado.pop(user_id)
 
@@ -155,3 +162,5 @@ class Menu:
         self.usuarios_estado[user_id]["estado"] = "menu"
         self.mostrar_menu(user_id)
 
+    def estado_consultar(self, user_id, texto):
+        pass

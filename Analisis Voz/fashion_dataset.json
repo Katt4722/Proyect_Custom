@@ -10,5 +10,62 @@
     "entrevista": "un look formal con tonos neutros y accesorios discretos",
     "playa": "ropa liviana y colores claros, como lino o algodón",
     "noche": "algo más sofisticado, con negro o tonos metálicos"
+  },
+  "off_topic_handling": {
+    "programming_courses": {
+      "response": "No ofrecemos cursos de programación pero creemos que es una excelente habilidad y te abre muchas muchas puertas!! De hecho fui creado por un equipo de programadoras que estan interesadas mucho en la moda",
+      "institutions": [
+        "Samsung Innovation Campus",
+        "Prodramar DEV"
+      ]
+    },
+    "personal_questions": "No respondemos preguntas personales",
+    "general_knowledge": "Solo respondemos preguntas relacionadas a la moda",
+    "philosophical_questions": "No respondemos preguntas filosóficas",
+    "entertainment": "No respondemos sobre series, películas u ocio general",
+    "technical_unrelated": "No respondemos preguntas técnicas que no estén relacionadas con la moda",
+    "other_topics": "No respondemos preguntas fuera del ámbito de la moda"
+  },
+  "faqs": [
+  {
+    "question": "¿Qué es el Bot de Moda?",
+    "answer": "Es un asistente virtual que te ayuda a elegir outfits, combinar colores y descubrir nuevas ideas de estilo según tus gustos o el clima del día."
+  },
+  {
+    "question": "¿Qué significa 'outfit'?",
+    "answer": "Outfit significa conjunto o look, es decir, la combinación completa de prendas, calzado y accesorios que usás en una ocasión."
+  },
+  {
+    "question": "¿Cómo puedo combinar colores correctamente?",
+    "answer": "Podés usar la opción 2️⃣ del menú para ver combinaciones, pero una regla general es elegir colores complementarios (por ejemplo, azul con naranja) o tonos neutros con uno llamativo."
+  },
+  {
+    "question": "¿Qué prendas son básicas en un guardarropa?",
+    "answer": "Camisa blanca, jeans clásicos, blazer, zapatillas neutras y una chaqueta liviana. Son versátiles y combinan con casi todo."
+  },
+  {
+    "question": "¿Cómo elegir un outfit según el clima?",
+    "answer": "Si hace calor, usá telas livianas y colores claros. En invierno, vestite en capas con tonos más oscuros. El bot puede sugerirte opciones con la función 4️⃣."
+  },
+  {
+    "question": "¿Qué es un estilo cápsula?",
+    "answer": "Es un guardarropa reducido con prendas esenciales que combinan entre sí. Ayuda a vestirte fácil, gastar menos y mantener un estilo coherente."
+  },
+  {
+    "question": "¿Puedo usar estampados diferentes en el mismo look?",
+    "answer": "Sí, pero lo ideal es que compartan una gama de colores o una escala similar. Por ejemplo, rayas finas con cuadros pequeños en tonos neutros."
+  },
+  {
+    "question": "¿Cómo puedo definir mi estilo personal?",
+    "answer": "Probá diferentes combinaciones, observá qué te hace sentir cómoda y segura. También podés pedirle al bot inspiración según tu estado de ánimo o tipo de evento."
+  },
+  {
+    "question": "¿Qué tipo de accesorios elevan un outfit simple?",
+    "answer": "Un cinturón llamativo, un collar con textura o unos zapatos con color pueden transformar un look básico en algo especial."
+  },
+  {
+    "question": "¿Qué hago si no sé qué ponerme?",
+    "answer": "Usá la opción 1️⃣ para recibir una sugerencia de outfit del día o describí tu situación y el bot te dará una recomendación personalizada."
   }
+]
 }

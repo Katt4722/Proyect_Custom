@@ -1,3 +1,14 @@
+#Agregue esto porque Python no encontraba las otras carpetas-----------------------------
+
+import sys
+import os
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+#-------------------------------------------------------------------------------------
+
+
 from Modelo.Usuario import Usuario
 from Modelo.Prenda import Prenda
 from Modelo.Outfit import Outfit

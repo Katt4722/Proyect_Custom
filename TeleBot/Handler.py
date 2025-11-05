@@ -1,4 +1,14 @@
+#Agregue esto porque Python no encontraba las otras carpetas-----------------------------
+
+import sys
 import os
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+#-------------------------------------------------------------------------------------
+
+
 import telebot
 from groq import Groq
 from dotenv import load_dotenv
@@ -9,8 +19,8 @@ from ChatBot.Core import responder, mostrar_menu, usuarios_estado
 
 load_dotenv()
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY","8336358155:AAHkwdN4i6zbW-5af3Gp7LAZwYMjqUIaEz4")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY","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")
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 groq_client = Groq(api_key=GROQ_API_KEY)
