@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import json
 import random
 
-from ChatBot.Core import responder, mostrar_menu, usuarios_estado
+from ChatBot.Core import Menu
 
 load_dotenv()
 
@@ -14,6 +14,20 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 groq_client = Groq(api_key=GROQ_API_KEY)
+
+
+# Cargar datos (por ejemplo, combinaciones o tendencias)
+def load_fashion_data():
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, "fashion_dataset.json")
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"⚠️ Error al cargar el dataset: {str(e)}")
+        return None
+
+fashion_data = load_fashion_data()
 
 # -----------------------
 # Funciones auxiliares
@@ -107,19 +121,20 @@ def handle_voice(message):
 # Handlers
 # -----------------------
 
+menu_principal = Menu(bot)
+
 @bot.message_handler(commands=['start'])
 def start(message):
     user_id = message.from_user.id
-    if user_id not in usuarios_estado:
-        usuarios_estado[user_id] = {"estado": "menu"}
+
     bot.send_message(user_id, "¡Hola! 💕 Soy tu asistente de moda. Vamos a brillar hoy ✨")
-    mostrar_menu(bot, user_id)
+    menu_principal.mostrar_menu(user_id)
 
 @bot.message_handler(func=lambda m: True)
 def handle_message(message):
     user_id = message.from_user.id
     texto = message.text.strip()
-    responder(bot, user_id, texto)
+    menu_principal.responder(user_id, texto)
 
 # Manejo de voz
 @bot.message_handler(content_types=["voice"])
