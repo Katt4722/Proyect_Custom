@@ -1,0 +1,103 @@
+from Modelo.Usuario import Usuario
+from Modelo.Prenda import Prenda
+from Modelo.Outfit import Outfit
+from Modelo.Color import Color
+from Modelo.Clima import Clima
+from Modelo.Sugerencia import Sugerencia
+from ChatBot.Diccionarios import prendas, combinaciones, clima_outfits, accesorios
+import random
+
+# Diccionario para guardar estado de cada usuario
+usuarios_estado = {}  
+
+
+stickers_cute = [
+    "CAACAgIAAxkBAAEHk2Fg1b9Xl2Z5fVtRQJZc9nRV1vOYGgACXQADwDZPE0G1t9V5uN7zIwQ",  # gatito
+    "CAACAgIAAxkBAAEHk2Ng1b9XqfO3JrtUoxv4zFQK5iY6JwACXgADwDZPE3lF8jl0g5q0IwQ",  # corazon rosa
+    "CAACAgIAAxkBAAEHk2Vg1b9XrT3H6L5KksMshIFXSh-8gACYAADwDZPE2Zw8Ct5V_2VIwQ",  # moñito
+]
+
+def mostrar_menu(bot, user_id):
+    bot.send_message(user_id, "¿Cómo seguimos? 🩷✨\n\n"
+                              "1️⃣ Sugerir outfit del día\n"
+                              "2️⃣ Ver combinaciones de colores\n"
+                              "3️⃣ Armar outfit con tu ropero 🌸\n"
+                              "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
+                              "5️⃣ Salir 🩷")
+
+def responder(bot, user_id, texto):
+    
+    if user_id not in usuarios_estado:
+        usuarios_estado[user_id] = {"estado": "menu", "usuario": Usuario()}
+
+    estado = usuarios_estado[user_id]["estado"]
+
+    # Estado principal del menú
+    if estado == "menu":
+        if texto == "1":
+            bot.send_message(user_id, "✨ Generando outfit del día... ✨")
+            prenda1 = Prenda("remera", "blanca", "casual")
+            prenda2 = Prenda("jean", "azul", "casual")
+            outfit = Outfit("Outfit del día")
+            outfit.agregar_prenda(prenda1)
+            outfit.agregar_prenda(prenda2)
+            bot.send_message(user_id, f"{outfit.mostrar_outfit()} 🩷✨")
+        # En caso de que fallen los stickers, comentar esta línea:
+        # bot.send_sticker(user_id, random.choice(stickers_cute))
+            mostrar_menu(bot, user_id)
+
+        elif texto == "2":
+            # Combinaciones de colores
+            usuarios_estado[user_id]["estado"] = "combinaciones_colores"
+            colores = ", ".join(prendas.keys())
+            bot.send_message(user_id, f"Podés combinar prendas según estos colores: {colores} 🌸\n"
+                                      "Por ejemplo, podés decirme un color y te doy combinaciones cute ✨")
+
+        elif texto == "3":
+            # Armar outfit con tu ropero
+            usuarios_estado[user_id]["estado"] = "armar_ropas"
+            bot.send_message(user_id, "¡Genial! ✨ Contame qué prendas tenés en mente o qué te gustaría usar 🩷")
+
+        elif texto == "4":
+            # Outfit según clima
+            usuarios_estado[user_id]["estado"] = "clima"
+            bot.send_message(user_id, "Contame cómo está el clima hoy ☀️🌧️❄️ (ej: húmedo, frío, soleado)")
+
+        elif texto == "5":
+            bot.send_message(user_id, "Bye! 🩷 ¡Que tengas un día fashionista! ✨")
+            usuarios_estado.pop(user_id)
+
+        else:
+            bot.send_message(user_id, "Ups 😅 no entendí, elegí una opción del menú 🩷")
+            mostrar_menu(bot, user_id)
+
+    # Estado combinaciones de colores
+    elif estado == "combinaciones_colores":
+        color = texto.lower()
+        if color in combinaciones:
+            sugerencias = ", ".join(combinaciones[color])
+            bot.send_message(user_id, f"Con el color {color} podrías combinar: {sugerencias} 🌸✨")
+        else:
+            bot.send_message(user_id, f"No conozco combinaciones para {color} 😅 Pero igual podemos probar algo cute! 💕")
+        usuarios_estado[user_id]["estado"] = "menu"
+        mostrar_menu(bot, user_id)
+
+    # Estado armar outfit con tu ropero
+    elif estado == "armar_ropas":
+        prendas_usuario = texto.lower()
+        bot.send_message(user_id, f"Perfecto! 😊 Con eso podrías combinar zapatillas blancas o un blazer gris claro 🩷✨")
+        bot.send_message(user_id, "¿Querés que te sugiera algún accesorio cute para completar el look? 🌸\n"
+                              "Elegí clima: frio, calido, soleado, lluvia, humedo")
+        usuarios_estado[user_id]["estado"] = "clima"
+
+
+    # Estado clima
+    elif estado == "clima":
+        clima = texto.lower()
+        if clima in clima_outfits:
+            outfit = clima_outfits[clima]
+            bot.send_message(user_id, f"Hoy está {clima}, entonces te recomiendo: {', '.join(outfit)} 🌸✨")
+        else:
+            bot.send_message(user_id, "No estoy segura de ese clima 😅 pero igual podés usar algo cute y cómodo 💕")
+        usuarios_estado[user_id]["estado"] = "menu"
+        mostrar_menu(bot, user_id)

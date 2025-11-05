@@ -1,0 +1,14 @@
+{
+  "colores": {
+    "primavera": ["rosa pastel", "celeste", "beige"],
+    "otoño": ["verde oliva", "marrón", "mostaza"],
+    "invierno": ["gris", "negro", "vino tinto"],
+    "verano": ["blanco", "coral", "azul marino"]
+  },
+  "ocasiones": {
+    "cita": "algo elegante pero cómodo, como un vestido midi o camisa con jeans bien ajustados",
+    "entrevista": "un look formal con tonos neutros y accesorios discretos",
+    "playa": "ropa liviana y colores claros, como lino o algodón",
+    "noche": "algo más sofisticado, con negro o tonos metálicos"
+  }
+}

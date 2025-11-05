@@ -1,0 +1,146 @@
+import os
+import telebot
+from groq import Groq
+from dotenv import load_dotenv
+import json
+import random
+
+from ChatBot.Core import responder, mostrar_menu, usuarios_estado
+
+load_dotenv()
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
+groq_client = Groq(api_key=GROQ_API_KEY)
+
+# -----------------------
+# Funciones auxiliares
+# -----------------------
+
+def get_groq_fashion_response(user_message: str):
+    try:
+        system_prompt = """Eres un asesor virtual de moda y estilo 👗🕶️.
+Ayuda al usuario a combinar prendas, elegir outfits o colores según ocasión o clima."""
+
+        chat_completion = groq_client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
+            ],
+            model="llama-3.3-70b-versatile",
+            temperature=0.6,
+            max_tokens=600
+        )
+
+        return chat_completion.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"❌ Error al obtener respuesta de Groq: {str(e)}")
+        return None
+
+
+def transcribe_voice_with_groq(message):
+    try:
+        file_info = bot.get_file(message.voice.file_id)
+        print(f"🎙️ Archivo recibido: {file_info.file_path}")
+        downloaded_file = bot.download_file(file_info.file_path)
+
+        temp_file = "temp_voice.ogg"
+        with open(temp_file, "wb") as f:
+            f.write(downloaded_file)
+
+        print("📤 Enviando a Whisper para transcripción...")
+        with open(temp_file, "rb") as file:
+            transcription = groq_client.audio.transcriptions.create(
+                file=(temp_file, file.read()),
+                model="whisper-large-v3-turbo",
+                response_format="json",
+                language="es"
+            )
+
+        os.remove(temp_file)
+
+        text = transcription.text.strip()
+        print(f"✅ Transcripción recibida: {text}")
+        return text
+
+    except Exception as e:
+        print(f"❌ Error al transcribir: {str(e)}")
+        return None
+
+
+@bot.message_handler(content_types=["voice"])
+def handle_voice(message):
+    processing_msg = bot.reply_to(
+        message, 
+        "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸"
+    )
+
+    transcription = transcribe_voice_with_groq(message)
+    if not transcription:
+        bot.edit_message_text(
+            "😅 Ups… no pude entender tu audio. ¿Podés intentar de nuevo? 🌸",
+            chat_id=message.chat.id, 
+            message_id=processing_msg.message_id
+        )
+        return
+
+    print(f"📝 Texto detectado: {transcription}")
+
+    response = get_groq_fashion_response(transcription)
+    if response:
+        bot.edit_message_text(
+            f"👗 Tu outfit del día: {response} 🌸✨",
+            chat_id=message.chat.id, 
+            message_id=processing_msg.message_id
+        )
+    else:
+        bot.edit_message_text(
+            "🌸 Lo siento, no pude generar tu outfit 😢 ¡Probemos otra vez! 👗✨",
+            chat_id=message.chat.id,
+            message_id=processing_msg.message_id
+        )
+
+
+# -----------------------
+# Handlers
+# -----------------------
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    user_id = message.from_user.id
+    if user_id not in usuarios_estado:
+        usuarios_estado[user_id] = {"estado": "menu"}
+    bot.send_message(user_id, "¡Hola! 💕 Soy tu asistente de moda. Vamos a brillar hoy ✨")
+    mostrar_menu(bot, user_id)
+
+@bot.message_handler(func=lambda m: True)
+def handle_message(message):
+    user_id = message.from_user.id
+    texto = message.text.strip()
+    responder(bot, user_id, texto)
+
+# Manejo de voz
+@bot.message_handler(content_types=["voice"])
+def handle_voice(message):
+    bot.send_chat_action(message.chat.id, 'typing')
+
+    transcription = transcribe_voice_with_groq(message)
+    if not transcription:
+        bot.reply_to(message, "⚠️ No pude transcribir tu audio, por favor intenta de nuevo.")
+        return
+
+    response = get_groq_fashion_response(transcription)
+    if response:
+        bot.reply_to(message, response)
+    else:
+        bot.reply_to(message, "❌ No pude procesar tu consulta. Intenta nuevamente más tarde.")
+
+
+# -----------------------
+# Inicio del bot
+# -----------------------
+if __name__ == "__main__":
+    print("Bot de moda iniciado 🩷✨")
+    bot.infinity_polling()
