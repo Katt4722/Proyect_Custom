@@ -41,7 +41,7 @@ class Menu:
     def responder(self, user_id, texto):
 
         if user_id not in self.usuarios_estado:
-            self.usuarios_estado[user_id] = {"estado": "menu", "usuario": Usuario()}
+            self.usuarios_estado[user_id] = {"estado": "menu", "usuario": Usuario("ashjk")} #le puse iasjdn para que ande
 
         estado = self.usuarios_estado[user_id]["estado"]
         texto = texto.lower()

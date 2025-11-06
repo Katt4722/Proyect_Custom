@@ -9,17 +9,26 @@ if project_root not in sys.path:
 #-------------------------------------------------------------------------------------
 
 import telebot
+from groq import Groq
+from dotenv import load_dotenv
 import random
 from ChatBot.CorePrueba import Menu
+from AnalisisVoz.AnalizarVoz import AnalizarVoz
+
 from Modelo.Usuario import Usuario
 
+load_dotenv()
 
 # ⚙️ Configuración del token
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8336358155:AAHkwdN4i6zbW-5af3Gp7LAZwYMjqUIaEz4")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY", "8336358155:AAHkwdN4i6zbW-5af3Gp7LAZwYMjqUIaEz4")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY","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")
 
 # Crear instancia del bot de Telegram
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 menu_principal = Menu(bot)
+
+groq_client = Groq(api_key=GROQ_API_KEY)
+analisis_de_voz = AnalizarVoz(bot, groq_client)
 
 # -----------------------
 # Handlers
@@ -39,6 +48,35 @@ def menu(message):
    
     # Llamamos a la función responder de CorePrueba.py
     menu_principal.responder(user_id, texto)
+
+@bot.message_handler(content_types=["voice"])
+def handle_voice(message):
+    processing_msg = bot.reply_to(message, "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸")
+
+    transcription = analisis_de_voz.transcribe_voice_with_groq(message)
+    if not transcription:
+        bot.edit_message_text(
+            "😅 Ups… no pude entender tu audio. ¿Podés intentar de nuevo? 🌸",
+            chat_id=message.chat.id, 
+            message_id=processing_msg.message_id
+        )
+        return
+
+    print(f"📝 Texto detectado: {transcription}")
+
+    response = analisis_de_voz.get_groq_fashion_response(transcription)
+    if response:
+        bot.edit_message_text(
+            f"👗 Tu outfit del día: {response} 🌸✨",
+            chat_id=message.chat.id, 
+            message_id=processing_msg.message_id
+        )
+    else:
+        bot.edit_message_text(
+            "🌸 Lo siento, no pude generar tu outfit 😢 ¡Probemos otra vez! 👗✨",
+            chat_id=message.chat.id,
+            message_id=processing_msg.message_id
+        )
 
 
 # -----------------------

@@ -71,6 +71,7 @@ def transcribe_voice_with_groq(message):
         downloaded_file = bot.download_file(file_info.file_path)
 
         temp_file = "temp_voice.ogg"
+
         with open(temp_file, "wb") as f:
             f.write(downloaded_file)
 
@@ -96,10 +97,7 @@ def transcribe_voice_with_groq(message):
 
 @bot.message_handler(content_types=["voice"])
 def handle_voice(message):
-    processing_msg = bot.reply_to(
-        message, 
-        "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸"
-    )
+    processing_msg = bot.reply_to(message, "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸")
 
     transcription = transcribe_voice_with_groq(message)
     if not transcription:
@@ -147,20 +145,6 @@ def handle_message(message):
     menu_principal.responder(user_id, texto)
 
 # Manejo de voz
-@bot.message_handler(content_types=["voice"])
-def handle_voice(message):
-    bot.send_chat_action(message.chat.id, 'typing')
-
-    transcription = transcribe_voice_with_groq(message)
-    if not transcription:
-        bot.reply_to(message, "⚠️ No pude transcribir tu audio, por favor intenta de nuevo.")
-        return
-
-    response = get_groq_fashion_response(transcription)
-    if response:
-        bot.reply_to(message, response)
-    else:
-        bot.reply_to(message, "❌ No pude procesar tu consulta. Intenta nuevamente más tarde.")
 
 
 # -----------------------
