@@ -6,6 +6,8 @@ from typing import Optional
 import time
 from dotenv import load_dotenv
 
+user_histories = {}  # Aquí guardaremos el historial de cada usuario
+
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_API_KEY')
@@ -121,14 +123,28 @@ def handle_text(message: tlb.types.Message):
 
 @bot.message_handler(content_types=["voice"])
 def handle_voice(message: tlb.types.Message):
+    user_id = message.from_user.id
     bot.send_chat_action(message.chat.id, 'typing')
-    transcription = transcribe_voice_with_groq(message)
 
+    # Transcribir audio
+    transcription = transcribe_voice_with_groq(message)
     if not transcription:
         bot.reply_to(message, "⚠️ No pude transcribir tu audio, por favor intenta de nuevo.")
         return
 
-    response = get_groq_fashion_response(transcription)
+    # Guarda en historial
+    if user_id not in user_histories:
+        user_histories[user_id] = []
+    user_histories[user_id].append({"role": "user", "content": transcription})
+
+    # Genera una respuesta usando el historial
+    historial = user_histories[user_id]
+    response = get_groq_fashion_response(" ".join([m["content"] for m in historial if m["role"]=="user"]))
+
+    # Guarda la respuesta en historial
+    user_histories[user_id].append({"role": "assistant", "content": response})
+
+    # Envía respuesta
     if response:
         bot.reply_to(message, response)
     else:
