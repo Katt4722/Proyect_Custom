@@ -136,21 +136,6 @@ def handle_message(message):
     texto = message.text.strip()
     menu_principal.responder(user_id, texto)
 
-# Manejo de voz
-@bot.message_handler(content_types=["voice"])
-def handle_voice(message):
-    bot.send_chat_action(message.chat.id, 'typing')
-
-    transcription = transcribe_voice_with_groq(message)
-    if not transcription:
-        bot.reply_to(message, "⚠️ No pude transcribir tu audio, por favor intenta de nuevo.")
-        return
-
-    response = get_groq_fashion_response(transcription)
-    if response:
-        bot.reply_to(message, response)
-    else:
-        bot.reply_to(message, "❌ No pude procesar tu consulta. Intenta nuevamente más tarde.")
 
 
 # -----------------------

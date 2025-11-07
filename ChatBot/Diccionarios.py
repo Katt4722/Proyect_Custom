@@ -25,10 +25,10 @@ combinaciones = {
 
 # Outfits por clima
 clima_outfits = {
-    "frio": ["abrigo gris", "bufanda rosa", "botas negras"],
-    "lluvia": ["impermeable amarillo", "botas de agua", "paraguas cute ☔️"],
-    "sol": ["remera ligera", "short beige", "sandalias 🩷"],
-    "humedo": ["remera fresca", "calza cómoda", "ata el pelo con un moñito cute 🌸"]
+    "Frio": ["abrigo gris", "bufanda rosa", "botas negras"],
+    "Lluvioso": ["impermeable amarillo", "botas de agua", "paraguas cute ☔️"],
+    "Soleado": ["remera ligera", "short beige", "sandalias 🩷"],
+    "Húmedo": ["remera fresca", "calza cómoda", "ata el pelo con un moñito cute 🌸"]
 }
 
 # Accesorios sugeridos

@@ -37,7 +37,8 @@ def load_fashion_data():
 fashion_data = load_fashion_data()
 
 
-def get_groq_fashion_response(user_message: str):
+def get_groq_fashion_response(user_id: int, new_user_message: str):
+
     try:
         system_prompt = f"""Eres un asesor virtual de moda y estilo 👗🕶️.
 Tu tarea es ayudar al usuario a elegir combinaciones de ropa, colores, estilos o outfits 
@@ -51,19 +52,27 @@ Reglas importantes:
 3. Usa un tono motivador y elegante, con emojis de moda o colores.
 4. Si el usuario menciona una ocasión (ej: boda, entrevista, cena, playa), adapta la recomendación al contexto.
 5. Si no entiende bien la pregunta, pide más detalles.
-6. No inventes marcas ni precios si no están en el dataset."""
+6. Si el usuario pide que te explayes más, recordá lo último que le dijiste y desarrollá tu explicación.
+7. No inventes marcas ni precios si no están en el dataset."""
+
+        # Obtener historial del usuario
+        historial = user_histories.get(user_id, [])
+
+        # Construir el listado de mensajes con roles reales
+        mensajes = [{"role": "system", "content": system_prompt}]
+        mensajes.extend(historial)  # agrega los mensajes anteriores del usuario y asistente
+        mensajes.append({"role": "user", "content": new_user_message})  # agrega el mensaje actual
 
         chat_completion = groq_client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
             model="llama-3.3-70b-versatile",
+            messages=mensajes,
             temperature=0.6,
             max_tokens=600
         )
 
-        return chat_completion.choices[0].message.content.strip()
+        response_text = chat_completion.choices[0].message.content.strip()
+        return response_text
+
     except Exception as e:
         print(f"❌ Error al obtener respuesta de Groq: {str(e)}")
         return None
