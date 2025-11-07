@@ -35,8 +35,7 @@ class Menu:
                                 "3️⃣ Armar outfit con tu ropero 🌸\n"
                                 "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
                                 "5️⃣ Analizar sentimientos\n"
-                                "6️⃣ Hablemos! 🩷"
-                                "7️⃣ Salir 🩷") 
+                                "6️⃣ Salir 🩷")
 
     def responder(self, user_id, texto):
         
@@ -79,7 +78,7 @@ class Menu:
                 self.usuarios_estado[user_id]["estado"] = "combinaciones_colores"
                 colores = ", ".join(combinaciones.keys())
                 self.bot.send_message(user_id, f"Podés combinar prendas según estos colores: {colores} 🌸\n"
-                                        "Por ejemplo, podés decirme un color y te doy combinaciones cute ✨")
+                                        "Decime un color y te doy combinaciones cute ✨")
 
             elif texto == "3":
                 # Armar outfit con tu ropero
@@ -96,10 +95,6 @@ class Menu:
                 self.bot.send_message(user_id, "Mandame un mensaje y analizare que sentimientos transmite!")
 
             elif texto == "6":
-                self.usuarios_estado[user_id]["estado"] = "consultar"
-                self.bot.send_message(user_id, "Esta opcion es para que hablemos! Podes preguntarme sobre tendencias, marcas de ropa o consultas sobre moda en general")
-
-            elif texto == "7":
                 self.bot.send_message(user_id, "Bye! 🩷 ¡Que tengas un día fashionista! ✨")
                 self.usuarios_estado.pop(user_id)
 
@@ -161,6 +156,3 @@ class Menu:
         self.bot.send_message(user_id, f"{sentimiento} {emoji}\n Tengo una confianza del {confianza:2%} en mi analisis") #El bot le manda al usuario el analisis de sentimiento de su mensaje 
         self.usuarios_estado[user_id]["estado"] = "menu"
         self.mostrar_menu(user_id)
-
-    def estado_consultar(self, user_id, texto):
-        pass

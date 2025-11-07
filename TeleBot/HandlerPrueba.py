@@ -41,6 +41,29 @@ def start(message):
     bot.send_message(user_id, "¡Hola! 💕 Soy tu asistente de moda. Vamos a brillar hoy ✨")
     menu_principal.mostrar_menu(user_id)
 
+
+@bot.message_handler(commands=['charlar'])
+def conversacion(message):
+    user_id = message.from_user.id
+
+    bot.send_message(user_id, "Vamos a charlar sobre moda! Dejame tus consultas o pedime lo que necesites al respecto")
+    bot.register_next_step_handler(message, continuar_conversacion)
+
+
+def continuar_conversacion(message):
+    user_id = message.from_user.id
+    texto = message.text.strip()
+
+    if texto == "/salir":
+        bot.send_message(user_id, "¡Gracias por la charla! ✨🩷 Si querés volver al menú, usa /start")
+        return
+
+    respuesta = analisis_de_voz.get_groq_fashion_response(texto)
+
+    bot.send_message(user_id, respuesta)
+    bot.register_next_step_handler(message, continuar_conversacion)
+
+
 @bot.message_handler(func=lambda m: True)
 def menu(message):
     user_id = message.from_user.id
@@ -77,7 +100,6 @@ def handle_voice(message):
             chat_id=message.chat.id,
             message_id=processing_msg.message_id
         )
-
 
 # -----------------------
 # Inicio del bot
