@@ -1,0 +1,203 @@
+#Agregue esto porque Python no encontraba las otras carpetas-----------------------------
+
+import sys
+import os
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+#-------------------------------------------------------------------------------------
+
+import base64
+import telebot
+from dotenv import load_dotenv
+from groq import Groq
+import requests
+import re
+#--------------------------------------
+
+
+load_dotenv()
+
+TOKEN_BOT_TELEGRAM = os.getenv("TELEGRAM_API_KEY")
+CLAVE_API_GROQ = os.getenv("GROQ_API_KEY")
+
+if not TOKEN_BOT_TELEGRAM or not CLAVE_API_GROQ:
+    raise ValueError("⚠️ Faltan variables TELEGRAM_BOT_TOKEN o GROQ_API_KEY en el archivo .env")
+
+bot = telebot.TeleBot(TOKEN_BOT_TELEGRAM)
+groq_client = Groq(api_key=CLAVE_API_GROQ)
+#--------------------------------------
+PROMPT_ASESOR_MODA = """
+Eres un Asesor de Moda Personal experto en estilo, colorimetría y comercio electrónico. 
+Analiza la imagen que te doy y responde con:
+1️⃣ Breve descripción general.
+2️⃣ Análisis de moda (tipo, estilo, colores).
+3️⃣ Recomendaciones de prendas o accesorios que combinen.
+"""
+
+PROMPT_MODA_TEXTO = """
+Eres un asistente virtual experto en moda y tendencias. 
+Responde preguntas del usuario sobre prendas, combinaciones, precios, lugares donde comprar o conseguirlo,
+usando un tono amable, breve y natural.
+"""
+#-------------------------------------
+@bot.message_handler(commands=["start"])
+def start(message):
+    bot.reply_to(
+        message,
+        "(ɔ◔‿◔)ɔ ♥¡Hola! Soy tu asesor de moda virtual.❤\n\n"
+        "📸 Envíame una foto para analizar tu look🙈 o \n"
+        "😉💬 Escribime algo como:\n"
+        "- '¿Dónde puedo comprar un vestido rojo?'\n"
+        "- 'Tiendas con camperas de cuero'\n"
+        "- 'Ropa parecida a esta foto'"
+    )
+#------------------------------------------
+def buscar_en_web(message):
+    try:
+        consulta = message.text.strip()
+        bot.reply_to(message, f"🌟Pensando la respuesta sobre: <b>{consulta}</b> ...", parse_mode="HTML")
+
+        url = "https://html.duckduckgo.com/html/"
+        params = {"q": consulta}
+        headers = {"User-Agent": "Mozilla/5.0"}
+        r = requests.get(url, params=params, headers=headers, timeout=10)
+
+# ❌ BORRAR desde aquí ---------------------------------
+    #    enlaces = re.findall(r'<a rel="nofollow" class="result__a" href="(.*?)">', r.text)
+    #    enlaces_validos = []
+
+        #for link in enlaces:
+        #    if "duckduckgo" in link:
+        #        continue
+        #    try:
+        #        test = requests.head(link, allow_redirects=True, timeout=5)
+        #        if test.status_code == 200:
+        #            enlaces_validos.append(link)
+        #    except:
+        #        continue
+
+        import urllib.parse
+
+        enlaces = re.findall(r'href="(/l/\?kh=.*?uddg=[^"]+|https?://[^"]+)"', r.text)
+        enlaces_validos = []
+
+        for link in enlaces:
+            # Decodificar redirecciones internas de DuckDuckGo
+            if link.startswith("/l/?"):
+                parsed = urllib.parse.parse_qs(urllib.parse.urlparse(link).query)
+                if "uddg" in parsed:
+                    link = urllib.parse.unquote(parsed["uddg"][0])
+                else:
+                    continue
+
+            if not link.startswith("http"):
+                continue
+
+            try:
+                test = requests.head(link, allow_redirects=True, timeout=5)
+                if test.status_code == 200:
+                    enlaces_validos.append(link)
+            except:
+                continue
+
+
+
+# ✅ HASTA aquí ---------------------------------
+
+        resultados = enlaces_validos[:5]  # Limitar a los primeros 5 links válidos
+
+        if resultados:
+            lista_links = "\n".join([f"{i+1}. {link}" for i, link in enumerate(resultados)])
+            texto_para_resumir = "\n".join(resultados)
+
+            response = groq_client.chat.completions.create(
+                model="meta-llama/llama-4-scout-17b-16e-instruct",
+                messages=[
+                    {"role": "system", "content": "Eres un experto en moda que resume brevemente resultados web para el usuario."},
+                    {"role": "user", "content": f"🎀Estos son los resultados que encontre para ti:\n{texto_para_resumir}\n\nResume brevemente qué tiendas o productos hay."}
+                ],
+                max_completion_tokens=400,
+            )
+
+            resumen = response.choices[0].message.content
+            bot.reply_to(
+                message,
+                f"🛍️ <b>Tiendas encontradas (verificadas y activas):</b>\n{lista_links}\n\n🧠 <b>Resumen:</b> {resumen}",
+                parse_mode="HTML"
+            )
+        else:
+           
+            response = groq_client.chat.completions.create(
+                model="meta-llama/llama-4-scout-17b-16e-instruct",
+                messages=[
+                    {"role": "system", "content": "Eres un experto en moda y compras online."},
+                    {"role": "user", "content": f"No encontré enlaces válidos😨, pero necesito que recomiendes tiendas o lugares donde conseguir {consulta} en Argentina o por internet.😌💋"}
+                ],
+                max_completion_tokens=400,
+            )
+
+            respuesta = response.choices[0].message.content
+            bot.reply_to(message, f"(>‿◠)✌ <b>Sugerencias:</b>\n{respuesta}", parse_mode="HTML")
+
+    except Exception as e:
+        bot.reply_to(message, f"⚠️ Error al buscar en la web:\n{str(e)}")
+#-------------------------------------
+@bot.message_handler(content_types=["photo"])
+def analizar_imagen(message):
+    try:
+        file_info = bot.get_file(message.photo[-1].file_id)
+        downloaded_file = bot.download_file(file_info.file_path)
+        image_base64 = base64.b64encode(downloaded_file).decode("utf-8")
+
+        bot.reply_to(message, "💌Analizando tu imagen...⏱ ")
+
+        response = groq_client.chat.completions.create(
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            messages=[
+                {"role": "system", "content": PROMPT_ASESOR_MODA},
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Analiza esta imagen de ropa y aplica el prompt anterior."},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}}
+                    ]
+                }
+            ],
+        )
+
+        resultado = response.choices[0].message.content
+        bot.reply_to(message, f"💌 <b>Análisis de la imagen:</b>\n{resultado}", parse_mode="HTML")
+
+        return  
+
+    except Exception as e:
+        bot.reply_to(message, f"⚠️ Error al procesar la imagen:\n{str(e)}")
+        return  
+#-------------------------------------
+@bot.message_handler(content_types=["text"])
+def manejar_texto(message):
+    consulta = message.text.lower().strip()
+
+    if any(p in consulta for p in ["precio", "comprar", "dónde", "donde", "argentina", "caba", "local", "tienda", "shop", "online", "marca", "outlet", "barato", "envío", "link", "venden", "venta", "mercado libre", "catálogo","cuánto esta", "cuanto esta", "valor","",]):
+        buscar_en_web(message)
+        return
+
+    if any(p in consulta for p in ["parecida", "similar", "igual a", "como esta", "recomendame", "combinar", "usar con", "inspiración", "estilo", "look", "opciones", "conjuntos", "me queda bien", "qué usar", "recomiendas", "outfit"]):
+        response = groq_client.chat.completions.create(
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            messages=[
+                {"role": "system", "content": PROMPT_MODA_TEXTO},
+                {"role": "user", "content": consulta}
+            ],
+            max_completion_tokens=400,
+        )
+        respuesta = response.choices[0].message.content
+        bot.reply_to(message, f"😘💬 <b>{respuesta}</b>", parse_mode="HTML")
+        return
+
+    buscar_en_web(message)
+#-------------------------------------
+print("🤖 Bot de asesor de moda con búsqueda real y análisis de imagen iniciado correctamente...")
+bot.polling()

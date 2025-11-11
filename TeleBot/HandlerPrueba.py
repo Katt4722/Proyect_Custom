@@ -1,5 +1,4 @@
 #Agregue esto porque Python no encontraba las otras carpetas-----------------------------
-
 import sys
 import os
 
@@ -11,9 +10,9 @@ if project_root not in sys.path:
 import telebot
 from groq import Groq
 from dotenv import load_dotenv
-import random
 from ChatBot.CorePrueba import Menu
 from AnalisisVoz.AnalizarVoz import AnalizarVoz
+from AnalisisDeImagen.AnalizarImagen import AnalizarImagen
 
 from Modelo.Usuario import Usuario
 
@@ -25,10 +24,11 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY","gsk_8Y4c4LrCdZYuWyo7rvwSWGdyb3FYtpRGiw2
 
 # Crear instancia del bot de Telegram
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
-menu_principal = Menu(bot)
-
 groq_client = Groq(api_key=GROQ_API_KEY)
+
+menu_principal = Menu(bot)
 analisis_de_voz = AnalizarVoz(bot, groq_client)
+analisis_de_imagen = AnalizarImagen(bot, groq_client)
 
 # -----------------------
 # Handlers
@@ -41,14 +41,12 @@ def start(message):
     bot.send_message(user_id, "¡Hola! 💕 Soy tu asistente de moda. Vamos a brillar hoy ✨")
     menu_principal.mostrar_menu(user_id)
 
-
 @bot.message_handler(commands=['charlar'])
 def conversacion(message):
     user_id = message.from_user.id
 
     bot.send_message(user_id, "Vamos a charlar sobre moda! Dejame tus consultas o pedime lo que necesites al respecto")
     bot.register_next_step_handler(message, continuar_conversacion)
-
 
 def continuar_conversacion(message):
     user_id = message.from_user.id
@@ -62,7 +60,6 @@ def continuar_conversacion(message):
 
     bot.send_message(user_id, respuesta)
     bot.register_next_step_handler(message, continuar_conversacion)
-
 
 @bot.message_handler(func=lambda m: True)
 def menu(message):
@@ -100,6 +97,10 @@ def handle_voice(message):
             chat_id=message.chat.id,
             message_id=processing_msg.message_id
         )
+
+@bot.message_handler(content_types=["photo"])
+def handler_image(message):
+    analisis_de_imagen.analizar_imagen(message)
 
 # -----------------------
 # Inicio del bot
