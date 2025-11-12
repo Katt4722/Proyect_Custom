@@ -30,6 +30,8 @@ menu_principal = Menu(bot)
 analisis_de_voz = AnalizarVoz(bot, groq_client)
 analisis_de_imagen = AnalizarImagen(bot, groq_client)
 
+user_histories = {}
+
 # -----------------------
 # Handlers
 # -----------------------
@@ -70,33 +72,37 @@ def menu(message):
     menu_principal.responder(user_id, texto)
 
 @bot.message_handler(content_types=["voice"])
-def handle_voice(message):
-    processing_msg = bot.reply_to(message, "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸")
+def handle_voice(message: telebot.types.Message):
 
+    bot.reply_to(message, "✨ Estoy escuchando tu audio... dame un segundito para encontrar tu look perfecto 🩷🌸")
+
+    user_id = message.from_user.id
+    bot.send_chat_action(message.chat.id, 'typing')
+
+    # Transcribir audio
     transcription = analisis_de_voz.transcribe_voice_with_groq(message)
+
     if not transcription:
-        bot.edit_message_text(
-            "😅 Ups… no pude entender tu audio. ¿Podés intentar de nuevo? 🌸",
-            chat_id=message.chat.id, 
-            message_id=processing_msg.message_id
-        )
+        bot.reply_to(message, "⚠️ No pude transcribir tu audio, por favor intenta de nuevo.")
         return
 
-    print(f"📝 Texto detectado: {transcription}")
+    # Guarda el historial
+    if user_id not in user_histories:
+        user_histories[user_id] = []
 
-    response = analisis_de_voz.get_groq_fashion_response(transcription)
+    user_histories[user_id].append({"role": "user", "content": transcription})
+
+    historial = user_histories[user_id] #esta variable es una lista de diccionarios, cada diccionario tiene como claves role (user o assistant) y content (respuesta del usuario o de la IA). 
+
+    response = analisis_de_voz.get_groq_fashion_response_with_history(transcription, historial)
+
+    # Guarda la respuesta en el historial
+    user_histories[user_id].append({"role": "assistant", "content": response})
+
     if response:
-        bot.edit_message_text(
-            f"👗 Tu outfit del día: {response} 🌸✨",
-            chat_id=message.chat.id, 
-            message_id=processing_msg.message_id
-        )
+        bot.reply_to(message, response)
     else:
-        bot.edit_message_text(
-            "🌸 Lo siento, no pude generar tu outfit 😢 ¡Probemos otra vez! 👗✨",
-            chat_id=message.chat.id,
-            message_id=processing_msg.message_id
-        )
+        bot.reply_to(message, "No pude procesar tu consulta. Intenta nuevamente más tarde...")
 
 @bot.message_handler(content_types=["photo"])
 def handler_image(message):

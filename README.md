@@ -1,371 +1,163 @@
-# ❤️  Proyecto de Bot de Telegram enfocado en moda ❤️ 
+# Chatbot de Moda 
 
-## 📋 Tabla de Contenidos
-- [¿Qué hace este proyecto?](#-qué-hace-este-proyecto)
-- [Requisitos previos](#-requisitos-previos)
-- [Instalación paso a paso](#-instalación-paso-a-paso)
-- [Cómo ejecutar el proyecto](#-cómo-ejecutar-el-proyecto)
-- [¿Cómo funciona el código?](#-cómo-funciona-el-código)
-- [Personalización](#-personalización)
-- [Posibles errores y soluciones](#-posibles-errores-y-soluciones)
-- [Referencias](#-referencias)
+## Descripción del proyecto
+El **Chatbot de Moda** es un asistente virtual diseñado para ayudarte a elegir tus outfits, combinar colores, analizar tu estado de ánimo ¡y mucho más!  
+A través de un menú interactivo, el chatbot te guía para crear combinaciones únicas, obtener recomendaciones según el clima o incluso analizar imágenes y audios.  
+Su objetivo es hacer que vestirse sea una experiencia divertida, sencilla, sin necesidad de perder mucho tiempo  y sobre todo que sea ¡muy fashionista! ✨
 
 ---
 
-## 🎯 ¿Qué hace este proyecto?
+## Ejecución del chatbot
 
-Este proyecto utiliza 
--La biblioteca **Transformers** de Hugging Face para realizar análisis de sentimientos en texto en español. 
--
--
--
-
-Este proyecto analiza el **sentimiento** (emociones) de frases en español y te dice si son:
-
-- **🙂 Positivas** (4 estrellas)  
-- **😐 Neutrales** (3 estrellas)
-- **😟 Negativas** (2 estrellas)
-
-
-## 🔧 Requisitos previos
-
-Antes de comenzar, necesitas tener instalado:
-
-### 1. Python 3.8 o superior
-- **Windows**: Descarga desde [python.org](https://www.python.org/downloads/)
-- **Verificar instalación**: Abre la terminal y ejecuta:
-  ```bash
-  python --version
-  ```
-  Debería mostrar algo como: `Python 3.11.0`
-
-### 2. Git (opcional pero recomendado)
-- **Windows**: Descarga desde [git-scm.com](https://git-scm.com/)
-- Esto te permitirá clonar el proyecto fácilmente
-
-### 3. Un editor de código
-- **Recomendado**: [Visual Studio Code](https://code.visualstudio.com/)
-- **Alternativas**: PyCharm, Sublime Text, o cualquier editor de texto
-
----
-
-## 🚀 Instalación paso a paso
-
-### Paso 1: Descargar el proyecto
-
-**Opción A: Con Git (recomendado)**
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd Transformers
-```
-
-**Opción B: Descarga manual**
-1. Descarga el proyecto como ZIP
-2. Extrae los archivos en una carpeta (ej: `D:\SIC\Transformers`)
-3. Abre la terminal en esa carpeta
-
-### Paso 2: Crear el entorno virtual
-
-Un **entorno virtual** es como una "caja separada" donde instalamos las librerías específicas de nuestro proyecto, sin afectar otras instalaciones de Python.
+Para ejecutar el chatbot, abrí tu consola o terminal en la carpeta del proyecto y escribí el siguiente comando:
 
 ```bash
-# Crear el entorno virtual
-python -m venv entorno-transformers
-
-# Verificar que se creó la carpeta
-ls entorno-transformers  # En Linux/Mac
-dir entorno-transformers  # En Windows CMD
-```
-
-### Paso 3: Activar el entorno virtual
-
-**En Windows (Git Bash/MINGW64):**
-```bash
-source entorno-transformers/Scripts/activate
-```
-
-**En Windows (CMD):**
-```cmd
-entorno-transformers\Scripts\activate.bat
-```
-
-**En Windows (PowerShell):**
-```powershell
-entorno-transformers\Scripts\Activate.ps1
-```
-
-**En Linux/Mac:**
-```bash
-source entorno-transformers/bin/activate
-```
-
-✅ **¿Cómo saber si está activado?**
-Tu terminal debería mostrar `(entorno-transformers)` al inicio de la línea:
-```bash
-(entorno-transformers) usuario@computadora:/ruta/del/proyecto$
-```
-
-### Paso 4: Instalar las dependencias
-
-Ahora instalamos todas las librerías necesarias:
-
-```bash
-# Actualizar pip (recomendado)
-python -m pip install --upgrade pip
-
-# Instalar todas las dependencias del proyecto
-pip install -r requirements.txt
-```
-
-⏰ **¡Paciencia!** Este proceso puede tomar varios minutos (5-15 min) ya que descarga librerías grandes como PyTorch y Transformers.
-
-### Paso 5: Verificar la instalación
-
-```bash
-# Verificar que las librerías principales están instaladas
-python -c "import transformers; print('✅ Transformers instalado correctamente')"
-python -c "import torch; print('✅ PyTorch instalado correctamente')"
+python -m TeleBot.Handler
 ```
 
 ---
 
-## ▶️ Cómo ejecutar el proyecto
+## Comando '/start'
 
-### 1. Asegúrate de que el entorno virtual esté activado
-```bash
-# Deberías ver (entorno-transformers) en tu terminal
-source entorno-transformers/Scripts/activate  # Si no está activado
-```
+Para iniciar la conversación con el chatbot, escribí en el chat de Telegram: '/start'
 
-### 2. Ejecutar el programa principal
-```bash
-python main.py
-```
 
-### 3. ¡Espera los resultados!
+Al hacerlo, recibirás un mensaje de bienvenida como:
 
-La primera vez tardará un poco más porque debe descargar el modelo de IA desde internet. Verás algo así:
+>  “¡Hola! Soy tu asistente de moda ✨. Estoy acá para ayudarte a combinar tus outfits, elegir looks y mantener tu estilo al día.”
 
-```
-Cargando el modelo de análisis de sentimiento...
-¡Modelo cargado con éxito! ✅
+Luego, un segundo mensaje te preguntará cómo querés continuar y mostrará las **6 opciones del menú principal** para empezar a interactuar.
 
-Analizando frases...
 
-Frase: '¡Me encantó este curso, aprendí muchísimo!'
-  -> Sentimiento Detectado: 5 STARS 😊 (Confianza: 89.45%)
+## Menú principal
 
-Frase: 'El servicio al cliente fue bastante lento y poco útil.'
-  -> Sentimiento Detectado: 2 STARS 😟 (Confianza: 76.82%)
-
-... (más resultados)
-```
+Una vez que el chatbot está en funcionamiento, te mostrará el **menú con las 6 opciones principales:**
 
 ---
 
-## 🧠 ¿Cómo funciona el código?
+### 1️⃣ Sugerir outfit del día
 
-### Estructura del archivo `main.py`:
+El chatbot genera un **outfit aleatorio** para el día.  
+Si volvés a elegir la opción 1, te mostrará una nueva sugerencia distinta.
 
-```python
-# 1. Importar la biblioteca
-from transformers import pipeline
-
-# 2. Crear el analizador de sentimientos
-analizador_sentimiento = pipeline(
-    "sentiment-analysis",
-    model="nlptown/bert-base-multilingual-uncased-sentiment"
-)
-
-# 3. Preparar frases para analizar
-frases_para_analizar = [
-    "¡Me encantó este curso, aprendí muchísimo!",
-    # ... más frases
-]
-
-# 4. Analizar cada frase
-resultados = analizador_sentimiento(frases_para_analizar)
-
-# 5. Mostrar resultados con emojis
-for frase, resultado in zip(frases_para_analizar, resultados):
-    sentimiento = resultado['label']    # Ej: '5 stars'
-    confianza = resultado['score']      # Ej: 0.8945 (89.45%)
-    print(f"Frase: '{frase}'")
-    print(f"Sentimiento: {sentimiento} (Confianza: {confianza:.2%})")
-```
-
-### Conceptos clave:
-
-- **Pipeline**: Una "tubería" que procesa texto automáticamente
-- **Modelo BERT**: Un modelo de IA entrenado para entender texto
-- **Multilingüe**: Funciona con varios idiomas, incluyendo español
-- **Confianza**: Qué tan seguro está el modelo de su predicción (0-100%)
+    **Ejemplo:**  
+> “Para hoy te recomiendo un jean celeste, una blusa blanca y zapatillas beige. ¡Un look casual pero con estilo!”
 
 ---
 
-## 🎨 Personalización
+### 2️⃣ Ver combinaciones de colores
 
-### Cambiar las frases a analizar
+Podés escribir un color (por ejemplo, “rosa”) y el chatbot te sugerirá combinaciones posibles con ese tono.
 
-Edita la lista `frases_para_analizar` en `main.py`:
+ **Ejemplo:**  
+> “El color rosa combina muy bien con una chaqueta blanca y zapatos rosas.”
 
-```python
-frases_para_analizar = [
-    "Tu primera frase aquí",
-    "Tu segunda frase aquí",
-    "¡Puedes agregar todas las que quieras!",
-    # Agregar más frases...
-]
-```
-
-### Probar con frases interactivas
-
-Puedes modificar el código para que pida frases al usuario:
-
-```python
-# Agregar al final de main.py
-print("\n" + "="*50)
-print("¡Ahora prueba con tus propias frases!")
-print("(Escribe 'salir' para terminar)")
-
-while True:
-    frase_usuario = input("\nEscribe una frase: ")
-    if frase_usuario.lower() == 'salir':
-        print("¡Hasta luego! 👋")
-        break
-    
-    resultado = analizador_sentimiento([frase_usuario])[0]
-    sentimiento = resultado['label']
-    confianza = resultado['score']
-    
-    # Mapear emoji (mismo código que antes)
-    emoji = "❓"
-    if "star" in sentimiento:
-        if sentimiento == '5 stars':
-            emoji = "😊"
-        elif sentimiento == '4 stars':
-            emoji = "🙂"
-        # ... etc
-    
-    print(f"  -> {sentimiento.upper()} {emoji} (Confianza: {confianza:.2%})")
-```
-
-### Usar otros modelos
-
-Puedes probar otros modelos cambiando esta línea:
-
-```python
-# Modelo actual (multilingüe)
-model="nlptown/bert-base-multilingual-uncased-sentiment"
-
-# Alternativa 1: Modelo más simple
-# model="cardiffnlp/twitter-roberta-base-sentiment-latest"
-
-# Alternativa 2: Modelo específico para español
-# model="finiteautomata/beto-sentiment-analysis"
-```
+Después, vuelve a mostrarte el menú para seguir explorando.
 
 ---
 
-## ❌ Posibles errores y soluciones
+### 3️⃣ Armar outfit con tu guardarropa
 
-### Error: "No module named 'transformers'"
-**Problema**: El entorno virtual no está activado o las librerías no están instaladas.
+Contale al chatbot qué prendas querés usar o qué tenés en mente, y él te ayudará a **completar el look.**
 
-**Solución**:
-```bash
-# 1. Activar entorno virtual
-source entorno-transformers/Scripts/activate
+**Ejemplo:**  
+> “Tengo un pantalón blanco y una remera marrón.”  
+ **Respuesta:** “Perfecto, con eso podrías combinar zapatillas blancas o un blazer gris claro. ¿Querés agregar un accesorio?”
 
-# 2. Reinstalar librerías
-pip install -r requirements.txt
-```
+Si respondés que sí, te sugerirá opciones (por ejemplo, una pulsera plateada o un bolso claro). 
+Si respondés que no, el chatbot sigue y te muestra el menu nuevamente por si queres seguir interactuando con él.
+---
 
-### Error: "torch" not found o similar
-**Problema**: PyTorch no se instaló correctamente.
+### 4️⃣ Sugerir outfit según el clima
 
-**Solución**:
-```bash
-# Instalar PyTorch manualmente
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-```
+Indicá el clima del día (por ejemplo, “frío”, “lluvia”, “soleado”) y el chatbot te recomendará un conjunto acorde.
 
-### Error de conexión a internet
-**Problema**: No puede descargar el modelo.
-
-**Solución**:
-- Verifica tu conexión a internet
-- Intenta ejecutar el programa más tarde
-- El modelo se descarga una sola vez y se guarda localmente
-
-### Error: "Permission denied" o permisos
-**Problema**: No tienes permisos para instalar en esa carpeta.
-
-**Solución**:
-```bash
-# Opción 1: Usar --user
-pip install --user -r requirements.txt
-
-# Opción 2: Ejecutar como administrador (Windows)
-# Clic derecho en terminal > "Ejecutar como administrador"
-```
-
-### El programa funciona muy lento
-**Solución**:
-- Es normal la primera vez (descarga el modelo)
-- Las siguientes ejecuciones serán más rápidas
-- Reduce el número de frases si es necesario
+ **Ejemplo:**  
+> “Hoy está frío, te recomiendo usar un abrigo gris, una bufanda rosa y unas botas negras.”
 
 ---
 
-## 📚 Referencias
+### 5️⃣ Analizar sentimiento de un texto
 
-### Documentación oficial:
-- [🤗 Transformers Library](https://huggingface.co/docs/transformers)
-- [PyTorch Documentation](https://pytorch.org/docs/)
-- [Hugging Face Models](https://huggingface.co/models)
+En esta opción podés escribir un texto libre (por ejemplo, cómo te sentís o una frase).  
+El chatbot lo analiza y te indica si el **sentimiento** es **positivo**, **negativo** o **neutral**, junto con un **porcentaje de certeza.**
 
-### Modelo utilizado:
-- [nlptown/bert-base-multilingual-uncased-sentiment](https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment)
-
-### Conceptos para aprender más:
-- **BERT**: Bidirectional Encoder Representations from Transformers
-- **NLP**: Natural Language Processing (Procesamiento de Lenguaje Natural)
-- **Transfer Learning**: Usar modelos pre-entrenados
-- **Sentiment Analysis**: Análisis de sentimientos
+ **Ejemplo:**  
+> “Hoy me siento súper feliz.”  
+ **Respuesta:** “Tu mensaje tiene un sentimiento positivo! espero que hoy tengas un lindo dia”
 
 ---
 
-## 🤝 Contribuir
+### 6️⃣ Salir
 
-¿Tienes ideas para mejorar el proyecto? ¡Genial!
+Finaliza la sesión con un mensaje simpático:
 
-1. Haz un fork del repositorio
-2. Crea una nueva rama: `git checkout -b mi-mejora`
-3. Realiza tus cambios
-4. Haz commit: `git commit -m "Agrego nueva funcionalidad"`
-5. Sube los cambios: `git push origin mi-mejora`
-6. Crea un Pull Request
+ **Ejemplo:**  
+> “Bye, ¡que tengas un día fashionista!”
 
 ---
 
-## 📄 Licencia
+## Comando especial: `/charlar`
 
-Este proyecto es de uso educativo. Siéntete libre de usarlo y modificarlo para aprender.
+Podés usar el comando `/charlar` para tener una **conversación libre sobre moda** con el chatbot.  
+En esta sección podés preguntarle **consejos, tendencias, combinaciones**, o simplemente charlar sobre **outfits y estilo personal.**
 
----
+ **Importante:**  
+El chatbot está especializado en **temas de moda**, por lo que no responderá preguntas fuera de ese ámbito (por ejemplo, sobre cocina o deportes).
 
-## 💡 Próximos pasos para los que no tienen ni plata ni miedo 
-
-Una vez que domines este proyecto, puedes:
-1. **Analizar archivos CSV** con miles de comentarios
-2. **Crear una interfaz web** con Flask/Streamlit  
-3. **Entrenar tu propio modelo** con datos específicos
-4. **Analizar otros idiomas** cambiando el modelo
-5. **Integrar con APIs** de Twitter, Reddit, etc.
-
-¡Happy coding! 🚀
+Podés seguir conversando todo lo que quieras, y para salir de esta sección solo tenés que escribir `/salir`.  
+Hasta que no uses ese comando, la conversación continuará en el **modo charla de moda.** 
 
 ---
 
-*Creado con ❤️ para estudiantes de IA y Python del SIC*
+## Funcionalidad extra: Envío de audios
+
+El chatbot también acepta **mensajes de voz.**  
+Por ejemplo, podés enviar un audio diciendo:
+
+> “Quiero un outfit para una cena con amigos esta noche.”
+
+El chatbot **transcribe el audio** y genera una **respuesta personalizada**, usando la **API de Groq** para el procesamiento de voz.
+
+---
+
+## Funcionalidad extra: Análisis de imágenes
+
+Podés **adjuntar una imagen** (por ejemplo, una foto de tu outfit o prenda), y el chatbot la **analizará y describirá lo que ve.**
+
+👀 **Ejemplo:**  
+> “Veo una falda negra, una blusa blanca y un bolso beige. ¡Un look elegante y clásico!”
+
+---
+
+## Tecnologías utilizadas
+
+- **Python**   
+- **TeleBot / PyTelegramBotAPI**  
+- **API Groq** (para reconocimiento de voz)  
+- **Modelos de análisis de imagen y sentimiento**  
+- **Integraciones personalizadas para generar respuestas dinámicas**
+
+---
+
+## 💡 Consejos de uso
+
+- Respondé con los **números del menú (1 a 6)** para moverte entre las opciones.  
+- En la sección de charla (`/charlar`), podés expresarte libremente sobre **moda.**  
+- Si el chatbot no entiende un comando, te mostrará nuevamente el menú principal.  
+- ¡Probá distintas combinaciones y descubrí nuevos estilos! ✨
+
+
+---
+
+## Autoras
+
+**Desarrollado por:** 💻 *Las Hechiseras del Código* ✨  
+👩‍💻 **Karen Mejía**  
+👩‍💻 **Sandra Quispe**  
+👩‍💻 **Heydi Titirico**
+
+Proyecto realizado con dedicación y estilo:🪄  
+> *“La moda se trata de expresar quién sos sin tener que decir una palabra.”* 👗
+
+---

@@ -50,6 +50,44 @@ class AnalizarVoz():
             print(f"❌ Error al obtener respuesta de Groq: {str(e)}")
             return None
     
+    def get_groq_fashion_response_with_history(self, new_user_message: str, historial):
+
+        fashion_data = self.load_fashion_data()
+        try:
+            system_prompt = f"""Eres un asesor virtual de moda y estilo 👗🕶️.
+    Tu tarea es ayudar al usuario a elegir combinaciones de ropa, colores, estilos o outfits 
+    basándote en las tendencias de moda, y en los siguientes datos de ejemplo:
+
+    {json.dumps(fashion_data, ensure_ascii=False, indent=2)}
+
+    Reglas importantes:
+    1. Sé amable, cercano y profesional, como un estilista personal.
+    2. Explica brevemente el porqué de tus recomendaciones.
+    3. Usa un tono motivador y elegante, con emojis de moda o colores.
+    4. Si el usuario menciona una ocasión (ej: boda, entrevista, cena, playa), adapta la recomendación al contexto.
+    5. Si no entiende bien la pregunta, pide más detalles.
+    6. Si el usuario pide que te explayes más, recordá lo último que le dijiste y desarrollá tu explicación.
+    7. No inventes marcas ni precios si no están en el dataset."""
+
+
+            chat_completion = self.groq.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role":"assistant", "content": " . ".join(["{}: {}".format(m["role"], m["content"]) for m in historial])},
+                    {"role": "user", "content": new_user_message}
+                ],
+                temperature=0.6,
+                max_tokens=600
+            )
+
+            response_text = chat_completion.choices[0].message.content.strip()
+            return response_text
+
+        except Exception as e:
+            print(f"❌ Error al obtener respuesta de Groq: {str(e)}")
+            return None
+
     def transcribe_voice_with_groq(self, message): #message es el mensaje que manda el usuario
         try:
             file_info = self.bot.get_file(message.voice.file_id)
