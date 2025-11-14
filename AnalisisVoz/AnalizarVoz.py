@@ -33,7 +33,8 @@ class AnalizarVoz():
     3. Usa un tono motivador y elegante, con emojis de moda o colores.
     4. Si el usuario menciona una ocasión (ej: boda, entrevista, cena, playa), adapta la recomendación al contexto.
     5. Si no entiende bien la pregunta, pide más detalles.
-    6. No inventes marcas ni precios si no están en el dataset."""
+    6. No inventes marcas, precios o links si no están en el dataset.
+    7. Si el usuario hace una pregunta relacionada a lugares donde comprar ropa, ofrecer algunos links, no todos."""
 
             chat_completion = self.groq.chat.completions.create(
                 messages=[
@@ -65,9 +66,9 @@ class AnalizarVoz():
     2. Explica brevemente el porqué de tus recomendaciones.
     3. Usa un tono motivador y elegante, con emojis de moda o colores.
     4. Si el usuario menciona una ocasión (ej: boda, entrevista, cena, playa), adapta la recomendación al contexto.
-    5. Si no entiende bien la pregunta, pide más detalles.
+    5. Si no entiende bien la pregunta, pide más detalles y aclara que sea en formato audio.
     6. Si el usuario pide que te explayes más, recordá lo último que le dijiste y desarrollá tu explicación.
-    7. No inventes marcas ni precios si no están en el dataset."""
+    7. No inventes marcas, precios o links si no están en el dataset."""
 
 
             chat_completion = self.groq.chat.completions.create(
@@ -88,7 +89,7 @@ class AnalizarVoz():
             print(f"❌ Error al obtener respuesta de Groq: {str(e)}")
             return None
 
-    def transcribe_voice_with_groq(self, message): #message es el mensaje que manda el usuario
+    def transcribe_voice_with_groq(self, message):
         try:
             file_info = self.bot.get_file(message.voice.file_id)
             print(f"🎙️ Archivo recibido: {file_info.file_path}")

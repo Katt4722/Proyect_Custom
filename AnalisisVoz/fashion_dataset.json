@@ -12,19 +12,13 @@
     "noche": "algo más sofisticado, con negro o tonos metálicos"
   },
   "off_topic_handling": {
-    "programming_courses": {
-      "response": "No ofrecemos cursos de programación pero creemos que es una excelente habilidad y te abre muchas muchas puertas!! De hecho fui creado por un equipo de programadoras que estan interesadas mucho en la moda",
-      "institutions": [
-        "Samsung Innovation Campus",
-        "Prodramar DEV"
-      ]
-    },
+    "programming_courses": "No ofrecemos cursos de programación pero creemos que es una excelente habilidad y te abre muchas muchas puertas!! De hecho fui creado por un equipo de programadoras que estan interesadas mucho en la moda",
     "personal_questions": "No respondemos preguntas personales",
     "general_knowledge": "Solo respondemos preguntas relacionadas a la moda",
     "philosophical_questions": "No respondemos preguntas filosóficas",
     "entertainment": "No respondemos sobre series, películas u ocio general",
     "technical_unrelated": "No respondemos preguntas técnicas que no estén relacionadas con la moda",
-    "other_topics": "No respondemos preguntas fuera del ámbito de la moda"
+    "other_topics": "No respondemos preguntas fuera del ámbito de la moda."
   },
   "faqs": [
   {
@@ -66,6 +60,58 @@
   {
     "question": "¿Qué hago si no sé qué ponerme?",
     "answer": "Usá la opción 1️⃣ para recibir una sugerencia de outfit del día o describí tu situación y el bot te dará una recomendación personalizada."
+  }
+],
+"links": [
+  {
+    "url": "https://www.estiloycolor_90000.com",
+    "nombre": "Estilo Y Color 9000",
+    "descripcion": "Boutique online que ofrece prendas artesanales inspiradas en la moda andina, con tejidos de lana y algodón."
+  },
+  {
+    "url": "https://www.urbanchicwear127.net",
+    "nombre": "Urban Chic Wear 127",
+    "descripcion": "Tienda de moda urbana con colecciones de temporada, calzado y accesorios para un look moderno."
+  },
+  {
+    "url": "https://www.vestidosdeluzysombra.org",
+    "nombre": "Vestidos de Luz y Sombra",
+    "descripcion": "Especialistas en vestidos de fiesta y gala, con diseños exclusivos y opciones de confección a medida."
+  },
+  {
+    "url": "https://www.casualtrend.com",
+    "nombre": "Casual Trend",
+    "descripcion": "Plataforma de ropa casual y deportiva, con envíos rápidos y promociones semanales en indumentaria básica."
+  },
+  {
+    "url": "https://www.sastrerialibre_-_.ar",
+    "nombre": "Sastrería Libre _-_",
+    "descripcion": "Servicio de sastrería contemporánea que combina cortes clásicos con detalles modernos, disponible en línea."
+  },
+  {
+    "url": "https://www.modaecoyasociados.com",
+    "nombre": "Moda Eco y Asociados",
+    "descripcion": "Colección de ropa sustentable elaborada con materiales reciclados y procesos amigables con el ambiente."
+  },
+  {
+    "url": "https://www.streetstylehub321.net",
+    "nombre": "Street Style Hub 321",
+    "descripcion": "Espacio dedicado a la moda callejera, con prendas exclusivas inspiradas en tendencias internacionales."
+  },
+  {
+    "url": "https://www.tradiciontextilFEM.org",
+    "nombre": "Tradición Textil Fem",
+    "descripcion": "Catálogo de indumentaria tradicional y regional, con piezas únicas elaboradas por artesanos locales."
+  },
+  {
+    "url": "https://www.glowfashionclub&fashion.com",
+    "nombre": "Glow Fashion Club & Fashion",
+    "descripcion": "Tienda enfocada en moda nocturna y accesorios brillantes, ideal para fiestas y eventos sociales."
+  },
+  {
+    "url": "https://www.minimaloutfitX0X0.ar",
+    "nombre": "Minimal Outfit X0X0",
+    "descripcion": "Colección de ropa minimalista y elegante, con diseños versátiles para combinar en cualquier ocasión."
   }
 ]
 }

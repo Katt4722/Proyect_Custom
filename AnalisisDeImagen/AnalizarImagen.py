@@ -5,14 +5,13 @@ from AnalisisVoz.AnalizarVoz import AnalizarVoz
 class AnalizarImagen(AnalizarVoz):
 
     def __init__(self, bot, groq):
-        super().__init__(bot, groq)  # Llamamos al constructor del padre
+        super().__init__(bot, groq)
         
     def analizar_imagen(self, message):
 
         fashion_data = self.load_fashion_data()
 
         try:
-
 
             system_prompt = f"""Eres un asesor virtual de moda y estilo 👗🕶️.
     Tu tarea es ayudar al usuario a elegir combinaciones de ropa, colores, estilos o outfits 
@@ -25,8 +24,9 @@ class AnalizarImagen(AnalizarVoz):
     2. Explica brevemente el porqué de tus recomendaciones.
     3. Usa un tono motivador y elegante, con emojis de moda o colores.
     4. Si el usuario menciona una ocasión (ej: boda, entrevista, cena, playa), adapta la recomendación al contexto.
-    5. Si no entiende bien la pregunta, pide más detalles.
-    6. No inventes marcas ni precios si no están en el dataset."""
+    5. No finalices el mensaje con una pregunta.
+    6. No inventes marcas, urls ni precios si no están en el dataset.
+    7. Sugiere 2 urls donde comprar ropa parecida de forma muy breve para finalizar el mensaje"""
 
 
             file_info = self.bot.get_file(message.photo[-1].file_id)

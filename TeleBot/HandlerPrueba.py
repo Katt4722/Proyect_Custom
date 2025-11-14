@@ -1,20 +1,16 @@
-#Agregue esto porque Python no encontraba las otras carpetas-----------------------------
 import sys
 import os
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.append(project_root)
-#-------------------------------------------------------------------------------------
 
 import telebot
 from groq import Groq
 from dotenv import load_dotenv
-from ChatBot.CorePrueba import Menu
+from Menu.CorePrueba import Menu
 from AnalisisVoz.AnalizarVoz import AnalizarVoz
 from AnalisisDeImagen.AnalizarImagen import AnalizarImagen
-
-from Modelo.Usuario import Usuario
 
 load_dotenv()
 
@@ -47,7 +43,7 @@ def start(message):
 def conversacion(message):
     user_id = message.from_user.id
 
-    bot.send_message(user_id, "Vamos a charlar sobre moda! Dejame tus consultas o pedime lo que necesites al respecto")
+    bot.send_message(user_id, "💕Vamos a charlar sobre moda💕 Dejame tus consultas o pedime lo que necesites al respecto. Para terminar esta conversacion, manda el comando /salir")
     bot.register_next_step_handler(message, continuar_conversacion)
 
 def continuar_conversacion(message):
@@ -68,7 +64,6 @@ def menu(message):
     user_id = message.from_user.id
     texto = message.text.strip()
    
-    # Llamamos a la función responder de CorePrueba.py
     menu_principal.responder(user_id, texto)
 
 @bot.message_handler(content_types=["voice"])

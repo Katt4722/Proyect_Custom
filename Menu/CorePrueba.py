@@ -9,13 +9,12 @@ if project_root not in sys.path:
 
 from transformers import pipeline
 
-from Modelo.Usuario import Usuario
-from Modelo.Prenda import Prenda
-from Modelo.Outfit import Outfit
-from Modelo.Color import Color
-from Modelo.Clima import Clima
-from Modelo.Sugerencia import Sugerencia
-from ChatBot.Diccionarios import prendas, combinaciones, clima_outfits, accesorios
+#from Modelo.Usuario import Usuario
+from Menu.Diccionarios import combinaciones, clima_outfits, accesorios
+
+class Usuario:
+    def __init__(self, nombre):
+        self.nombre = nombre
 
 class Menu:
     def __init__(self, bot):
@@ -31,12 +30,13 @@ class Menu:
                                 "3️⃣ Armar outfit con tu ropero 🌸\n"
                                 "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
                                 "5️⃣ Analizar sentimientos\n"
-                                "6️⃣ Salir 🩷")
+                                "6️⃣ Salir 🩷\n\n"
+                                "🌻 Para tener una charla libre manda /charlar 🌻")
 
     def responder(self, user_id, texto):
         
         if user_id not in self.usuarios_estado:
-            self.usuarios_estado[user_id] = {"estado": "menu", "usuario": Usuario("Provisorio")} #en vez de 1 ahi decia "usuario" : Usuario()
+            self.usuarios_estado[user_id] = {"estado": "menu", "usuario": Usuario(nombre=f"Usuario_{user_id}")}
 
         estado = self.usuarios_estado[user_id]["estado"]
         texto = texto.lower()
@@ -138,6 +138,7 @@ class Menu:
         self.bot.send_message(user_id, "¿Querés que te sugiera algún accesorio cute para completar el look? 🌸\n")
         self.usuarios_estado[user_id]["estado"] = "accesorios"
 
+    #Estado elegir accesorios
     def estado_accesorios(self, user_id, respuesta):
         
         if "sí" in respuesta or "si" in respuesta:
@@ -183,21 +184,21 @@ class Menu:
         
         resultado = analizador_sentimiento(frase)[0]
 
-        sentimiento = resultado['label']  #traigo la etiqueta label y score
+        sentimiento = resultado['label']
         confianza = resultado['score']
 
         if sentimiento.lower() == 'pos':
             sentimiento = 'Tu mensaje tiene un sentimiento positivo! espero que hoy tengas un lindo dia'
-            emoji = ':)'
+            emoji = '😊🌟'
         elif sentimiento.lower() == 'neu':
             sentimiento = 'Tu mensaje fue neutral...'
-            emoji = ':|'
+            emoji = '😐'
         elif sentimiento.lower() == 'neg':
             sentimiento = 'Detecto que hay sentimientos negativos, te recomiendo hablarlo con alguien con quien te sientas comodo!'
-            emoji = ':('
+            emoji = '😞'
         else:
             emoji = 'H'
 
-        self.bot.send_message(user_id, f"{sentimiento} {emoji}\n Tengo una confianza del {confianza:2%} en mi analisis") #El bot le manda al usuario el analisis de sentimiento de su mensaje 
+        self.bot.send_message(user_id, f"{sentimiento} {emoji}\n Tengo una confianza del {confianza:2%} en mi analisis")
         self.usuarios_estado[user_id]["estado"] = "menu"
         self.mostrar_menu(user_id)
