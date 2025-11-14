@@ -9,7 +9,6 @@ if project_root not in sys.path:
 
 from transformers import pipeline
 
-#from Modelo.Usuario import Usuario
 from Menu.Diccionarios import combinaciones, clima_outfits, accesorios
 
 class Usuario:
