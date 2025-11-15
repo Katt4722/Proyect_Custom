@@ -40,7 +40,7 @@ Una vez que el chatbot está en funcionamiento, te mostrará el **menú con las 
 El chatbot genera un **outfit aleatorio** para el día.  
 Si volvés a elegir la opción 1, te mostrará una nueva sugerencia distinta.
 
-    **Ejemplo:**  
+**Ejemplo:**  
 > “Para hoy te recomiendo un jean celeste, una blusa blanca y zapatillas beige. ¡Un look casual pero con estilo!”
 
 ---
@@ -82,7 +82,7 @@ Indicá el clima del día (por ejemplo, “frío”, “lluvia”, “soleado”
 En esta opción podés escribir un texto libre (por ejemplo, cómo te sentís o una frase).  
 El chatbot lo analiza y te indica si el **sentimiento** es **positivo**, **negativo** o **neutral**, junto con un **porcentaje de certeza.**
 
- **Ejemplo:**  
+**Ejemplo:**  
 > “Hoy me siento súper feliz.”  
  **Respuesta:** “Tu mensaje tiene un sentimiento positivo! espero que hoy tengas un lindo dia”
 
