@@ -8,15 +8,15 @@ if project_root not in sys.path:
 import telebot
 from groq import Groq
 from dotenv import load_dotenv
-from Menu.CorePrueba import Menu
+from ChatBot.Core import Menu
 from AnalisisVoz.AnalizarVoz import AnalizarVoz
 from AnalisisDeImagen.AnalizarImagen import AnalizarImagen
 
 load_dotenv()
 
 # ⚙️ Configuración del token
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY", "8336358155:AAHkwdN4i6zbW-5af3Gp7LAZwYMjqUIaEz4")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY","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")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Crear instancia del bot de Telegram
 bot = telebot.TeleBot(TELEGRAM_TOKEN)

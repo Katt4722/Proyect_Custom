@@ -9,7 +9,7 @@ if project_root not in sys.path:
 
 from transformers import pipeline
 
-from Menu.Diccionarios import combinaciones, clima_outfits, accesorios
+from ChatBot.Diccionarios import combinaciones, clima_outfits, accesorios
 
 class Usuario:
     def __init__(self, nombre):
@@ -24,11 +24,11 @@ class Menu:
 
     def mostrar_menu(self, user_id):
         self.bot.send_message(user_id, "¿Cómo seguimos? 🩷✨\n\n"
-                                "1️⃣ Sugerir outfit del día\n"
-                                "2️⃣ Ver combinaciones de colores\n"
+                                "1️⃣ Sugerir outfit del día 🌸\n"
+                                "2️⃣ Ver combinaciones de colores 🧡💛💚💙💜\n"
                                 "3️⃣ Armar outfit con tu ropero 🌸\n"
                                 "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
-                                "5️⃣ Analizar sentimientos\n"
+                                "5️⃣ Analizar sentimientos ✏️💫\n"
                                 "6️⃣ Salir 🩷\n\n"
                                 "🌻 Para tener una charla libre manda /charlar 🌻")
 
