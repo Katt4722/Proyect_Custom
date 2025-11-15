@@ -26,7 +26,7 @@ class Menu:
         self.bot.send_message(user_id, "¿Cómo seguimos? 🩷✨\n\n"
                                 "1️⃣ Sugerir outfit del día 🌸\n"
                                 "2️⃣ Ver combinaciones de colores 🧡💛💚💙💜\n"
-                                "3️⃣ Armar outfit con tu ropero 🌸\n"
+                                "3️⃣ Armar outfit con tu guardaropa 🌸\n"
                                 "4️⃣ Sugerir outfit según el clima ☀️🌧️❄️\n"
                                 "5️⃣ Analizar sentimientos ✏️💫\n"
                                 "6️⃣ Salir 🩷\n\n"
